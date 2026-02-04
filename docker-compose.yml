@@ -10,7 +10,7 @@ services:
       - NODE_ENV=production
       - DATABASE_PATH=/app/data/chat.db
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-1.5-flash}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash}
     volumes:
       - chat-data:/app/data
     ports:

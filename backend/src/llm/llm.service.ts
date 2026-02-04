@@ -43,7 +43,7 @@ export class LlmService implements OnModuleInit {
 
   private async initialize() {
     const apiKey = this.configService.get<string>('GOOGLE_API_KEY');
-    const model = this.configService.get<string>('GEMINI_MODEL') || 'gemini-1.5-flash';
+    const model = this.configService.get<string>('GEMINI_MODEL') || 'gemini-2.5-flash';
 
     if (!apiKey) {
       this.logger.warn('GOOGLE_API_KEY not set. LLM features will be disabled.');
@@ -54,6 +54,7 @@ export class LlmService implements OnModuleInit {
       apiKey,
       model,
       temperature: 0.7,
+      maxRetries: 2,
     });
 
     const embeddings = new GoogleGenerativeAIEmbeddings({
@@ -159,12 +160,16 @@ export class LlmService implements OnModuleInit {
       ]);
 
       const formattedMessages = await prompt.formatMessages({ context, question: message });
-      const stream = await this.llm.stream(formattedMessages, { signal });
+      const stream = await this.llm.stream(formattedMessages);
 
       for await (const chunk of stream) {
         if (signal?.aborted) break;
-        if (chunk.content) {
-          yield chunk.content.toString();
+        const content = chunk.content;
+        if (content) {
+          const text = typeof content === 'string' ? content : String(content);
+          if (text) {
+            yield text;
+          }
         }
       }
     } catch (error) {

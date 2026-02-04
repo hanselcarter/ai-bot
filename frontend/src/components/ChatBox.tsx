@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import Markdown from 'react-markdown';
 import { Message } from '../types/chat';
 import { streamMessage } from '../services/chatApi';
 import './ChatBox.css';
@@ -140,7 +141,11 @@ export default function ChatBox() {
                 </div>
                 <div className="message-content">
                   <div className={`message ${message.sender === 'user' ? 'user-message' : 'bot-message'}`}>
-                    {message.text}
+                    {message.sender === 'bot' ? (
+                      <Markdown>{message.text}</Markdown>
+                    ) : (
+                      message.text
+                    )}
                   </div>
                   <span className="message-time">{formatTime(message.timestamp)}</span>
                 </div>
@@ -151,7 +156,9 @@ export default function ChatBox() {
               <div className="typing-indicator">
                 <div className="avatar bot">🤖</div>
                 <div className="typing-bubble">
-                  {streamingText || (
+                  {streamingText ? (
+                    <Markdown>{streamingText}</Markdown>
+                  ) : (
                     <div className="typing-dots">
                       <span></span>
                       <span></span>

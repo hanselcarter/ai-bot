@@ -7,8 +7,7 @@ An AI-powered chat application featuring a **Software Engineering Expert** assis
 ## ✨ Why Gemini?
 
 This project uses **Google Gemini** instead of OpenAI because:
-- **Free tier available** - No credit card required to get started
-- **Generous limits** - 15 requests/minute, 1500 requests/day on free tier
+- **Free tier available** - No credit card required to get started (limits subject to change)
 - **Fast responses** - Gemini 1.5 Flash is optimized for speed
 
 ---
@@ -43,8 +42,8 @@ Open `.env` and add your Gemini API key:
 # Get your free key from https://aistudio.google.com/app/apikey
 GOOGLE_API_KEY=your-api-key-here
 
-# Optional: Change the model (default: gemini-1.5-flash)
-GEMINI_MODEL=gemini-1.5-flash
+# Optional: Change the model (default: gemini-2.5-flash)
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
 ### Step 3: Run with Docker
@@ -297,7 +296,7 @@ docker-compose down -v
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `GOOGLE_API_KEY` | **Yes** | - | Your Google Gemini API key |
-| `GEMINI_MODEL` | No | `gemini-1.5-flash` | Gemini model to use |
+| `GEMINI_MODEL` | No | `gemini-2.5-flash` | Gemini model to use |
 | `DATABASE_PATH` | No | `data/chat.db` | SQLite database path |
 
 ---

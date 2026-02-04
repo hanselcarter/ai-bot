@@ -30,7 +30,7 @@ describe('LlmService', () => {
     get: jest.fn((key: string) => {
       const config: Record<string, string> = {
         GOOGLE_API_KEY: 'test-api-key',
-        GEMINI_MODEL: 'gemini-1.5-flash',
+        GEMINI_MODEL: 'gemini-2.5-flash',
       };
       return config[key];
     }),
@@ -63,7 +63,7 @@ describe('LlmService', () => {
     });
 
     it('should read GEMINI_MODEL from config', () => {
-      expect(configService.get('GEMINI_MODEL')).toBe('gemini-1.5-flash');
+      expect(configService.get('GEMINI_MODEL')).toBe('gemini-2.5-flash');
     });
   });
 

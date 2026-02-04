@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+.git
+.gitignore
+coverage
+.nyc_output
+*.md
+!src/llm/knowledge/*.md
+test
+*.spec.ts
+data

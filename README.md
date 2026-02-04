@@ -8,7 +8,7 @@ An AI-powered chat application featuring a **Software Engineering Expert** assis
 
 This project uses **Google Gemini** instead of OpenAI because:
 - **Free tier available** - No credit card required to get started (limits subject to change)
-- **Fast responses** - Gemini 1.5 Flash is optimized for speed
+- **Fast responses** - Gemini Flash models are optimized for speed
 
 ---
 

@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { LlmService } from '../src/llm/llm.service';
 
-jest.mock('@langchain/openai', () => ({
-  ChatOpenAI: jest.fn().mockImplementation(() => ({
+jest.mock('@langchain/google-genai', () => ({
+  ChatGoogleGenerativeAI: jest.fn().mockImplementation(() => ({
     invoke: jest.fn(),
   })),
-  OpenAIEmbeddings: jest.fn().mockImplementation(() => ({
+  GoogleGenerativeAIEmbeddings: jest.fn().mockImplementation(() => ({
     embedDocuments: jest.fn().mockResolvedValue([[0.1, 0.2, 0.3]]),
     embedQuery: jest.fn().mockResolvedValue([0.1, 0.2, 0.3]),
   })),
@@ -29,8 +29,8 @@ describe('LlmService', () => {
   const mockConfigService = {
     get: jest.fn((key: string) => {
       const config: Record<string, string> = {
-        OPENAI_API_KEY: 'test-api-key',
-        OPENAI_MODEL: 'gpt-3.5-turbo',
+        GOOGLE_API_KEY: 'test-api-key',
+        GEMINI_MODEL: 'gemini-1.5-flash',
       };
       return config[key];
     }),
@@ -58,12 +58,12 @@ describe('LlmService', () => {
   });
 
   describe('configuration', () => {
-    it('should read OPENAI_API_KEY from config', () => {
-      expect(configService.get('OPENAI_API_KEY')).toBe('test-api-key');
+    it('should read GOOGLE_API_KEY from config', () => {
+      expect(configService.get('GOOGLE_API_KEY')).toBe('test-api-key');
     });
 
-    it('should read OPENAI_MODEL from config', () => {
-      expect(configService.get('OPENAI_MODEL')).toBe('gpt-3.5-turbo');
+    it('should read GEMINI_MODEL from config', () => {
+      expect(configService.get('GEMINI_MODEL')).toBe('gemini-1.5-flash');
     });
   });
 
@@ -87,7 +87,7 @@ describe('LlmService', () => {
       await unconfiguredService.onModuleInit();
 
       const result = await unconfiguredService.chat('test message');
-      expect(result).toContain('OPENAI_API_KEY');
+      expect(result).toContain('GOOGLE_API_KEY');
     });
   });
 
@@ -115,7 +115,7 @@ describe('LlmService', () => {
         tokens.push(token);
       }
 
-      expect(tokens.join('')).toContain('OPENAI_API_KEY');
+      expect(tokens.join('')).toContain('GOOGLE_API_KEY');
     });
   });
 });

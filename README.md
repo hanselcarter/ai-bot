@@ -1,21 +1,26 @@
 # Software Engineering AI Chat Assistant
 
-An AI-powered chat application featuring a **Software Engineering Expert** assistant built with NestJS, React, and LangChain. The assistant uses RAG (Retrieval-Augmented Generation) to answer questions about design patterns, testing best practices, and clean code principles.
+An AI-powered chat application featuring a **Software Engineering Expert** assistant built with NestJS, React, and LangChain. The assistant uses RAG (Retrieval-Augmented Generation) with **Google Gemini** to answer questions about design patterns, testing best practices, and clean code principles.
 
 ---
 
-## ⚠️ IMPORTANT: OpenAI API Key Required
+## ✨ Why Gemini?
 
-> **This application requires an OpenAI API key to function.**
->
-> Without a valid API key, the AI assistant will not be able to respond to your questions.
+This project uses **Google Gemini** instead of OpenAI because:
+- **Free tier available** - No credit card required to get started
+- **Generous limits** - 15 requests/minute, 1500 requests/day on free tier
+- **Fast responses** - Gemini 1.5 Flash is optimized for speed
 
-### Get Your API Key
+---
 
-1. Go to [OpenAI Platform](https://platform.openai.com/api-keys)
-2. Sign up or log in to your account
-3. Create a new API key
-4. Copy the key (you won't be able to see it again!)
+## 🔑 Get Your Free API Key
+
+1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Copy the key
+
+That's it! No billing setup required.
 
 ---
 
@@ -32,14 +37,14 @@ cp .env.example .env
 
 ### Step 2: Add Your API Key
 
-Open `.env` and add your OpenAI API key:
+Open `.env` and add your Gemini API key:
 
 ```env
-# ⚠️ REQUIRED - Get your key from https://platform.openai.com/api-keys
-OPENAI_API_KEY=sk-your-actual-api-key-here
+# Get your free key from https://aistudio.google.com/app/apikey
+GOOGLE_API_KEY=your-api-key-here
 
-# Optional: Change the model (default: gpt-3.5-turbo)
-OPENAI_MODEL=gpt-3.5-turbo
+# Optional: Change the model (default: gemini-1.5-flash)
+GEMINI_MODEL=gemini-1.5-flash
 ```
 
 ### Step 3: Run with Docker
@@ -67,15 +72,15 @@ That's it! Start chatting with your AI Software Engineering assistant.
 ### Backend Setup
 
 ```bash
+# From repo root
+cp .env.example .env
+
+# Edit .env and add your GOOGLE_API_KEY!
+
 cd backend
 
 # Install dependencies
 npm install
-
-# Create environment file
-cp .env.example .env
-
-# ⚠️ Edit .env and add your OPENAI_API_KEY!
 
 # Start development server
 npm run start:dev
@@ -111,12 +116,11 @@ Frontend runs on http://localhost:5173
 │   │   ├── llm/                # LLM integration
 │   │   │   ├── knowledge/      # RAG knowledge base (.md files)
 │   │   │   ├── llm.module.ts
-│   │   │   └── llm.service.ts  # OpenAI + LangChain
+│   │   │   └── llm.service.ts  # Gemini + LangChain
 │   │   ├── app.module.ts
 │   │   └── main.ts
 │   ├── test/                   # Unit tests
 │   ├── Dockerfile
-│   └── .env.example
 ├── frontend/                   # React + Vite client
 │   ├── src/
 │   │   ├── components/
@@ -125,7 +129,7 @@ Frontend runs on http://localhost:5173
 │   ├── Dockerfile
 │   └── nginx.conf
 ├── docker-compose.yml
-├── .env.example                # ⚠️ Copy this to .env
+├── .env.example                # Copy this to .env
 └── README.md
 ```
 
@@ -292,8 +296,8 @@ docker-compose down -v
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `OPENAI_API_KEY` | **Yes** | - | Your OpenAI API key |
-| `OPENAI_MODEL` | No | `gpt-3.5-turbo` | OpenAI model to use |
+| `GOOGLE_API_KEY` | **Yes** | - | Your Google Gemini API key |
+| `GEMINI_MODEL` | No | `gemini-1.5-flash` | Gemini model to use |
 | `DATABASE_PATH` | No | `data/chat.db` | SQLite database path |
 
 ---
@@ -321,13 +325,13 @@ The files are automatically loaded and embedded when the server starts.
 ### "LLM service is not configured"
 
 Your API key is missing or invalid. Check:
-1. `.env` file exists in the project root (for Docker) or `backend/` (for local dev)
-2. `OPENAI_API_KEY` is set correctly
-3. The API key is valid and has credits
+1. `.env` file exists in the project root
+2. `GOOGLE_API_KEY` is set correctly
+3. The API key is valid (test at https://aistudio.google.com)
 
 ### "Failed to get response from AI service"
 
-- Check your OpenAI API quota/credits
+- Check your Gemini API quota (15 req/min on free tier)
 - Verify your API key has the correct permissions
 - Check network connectivity
 

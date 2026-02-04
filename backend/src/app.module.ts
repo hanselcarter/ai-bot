@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as path from 'path';
 import { ChatModule } from './chat/chat.module';
 import { LlmModule } from './llm/llm.module';
 import { ChatMessageEntity } from './chat/entities/chat-message.entity';
@@ -9,6 +10,10 @@ import { ChatMessageEntity } from './chat/entities/chat-message.entity';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: [
+        path.resolve(process.cwd(), '.env'),
+        path.resolve(process.cwd(), '..', '.env'),
+      ],
     }),
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',

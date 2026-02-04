@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
+import { ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings } from '@langchain/google-genai';
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 import { Document } from '@langchain/core/documents';
 import { StringOutputParser } from '@langchain/core/output_parsers';
@@ -32,7 +32,7 @@ Context:
 export class LlmService implements OnModuleInit {
   private readonly logger = new Logger(LlmService.name);
   private vectorStore: MemoryVectorStore;
-  private llm: ChatOpenAI;
+  private llm: ChatGoogleGenerativeAI;
   private chain: RunnableSequence<{ question: string }, string>;
 
   constructor(private configService: ConfigService) {}
@@ -42,29 +42,30 @@ export class LlmService implements OnModuleInit {
   }
 
   private async initialize() {
-    const apiKey = this.configService.get<string>('OPENAI_API_KEY');
-    const model = this.configService.get<string>('OPENAI_MODEL') || 'gpt-3.5-turbo';
+    const apiKey = this.configService.get<string>('GOOGLE_API_KEY');
+    const model = this.configService.get<string>('GEMINI_MODEL') || 'gemini-1.5-flash';
 
     if (!apiKey) {
-      this.logger.warn('OPENAI_API_KEY not set. LLM features will be disabled.');
+      this.logger.warn('GOOGLE_API_KEY not set. LLM features will be disabled.');
       return;
     }
 
-    this.llm = new ChatOpenAI({
-      openAIApiKey: apiKey,
-      modelName: model,
+    this.llm = new ChatGoogleGenerativeAI({
+      apiKey,
+      model,
       temperature: 0.7,
     });
 
-    const embeddings = new OpenAIEmbeddings({
-      openAIApiKey: apiKey,
+    const embeddings = new GoogleGenerativeAIEmbeddings({
+      apiKey,
+      model: 'text-embedding-004',
     });
 
     const documents = await this.loadKnowledgeDocuments();
     this.vectorStore = await MemoryVectorStore.fromDocuments(documents, embeddings);
 
     this.chain = this.createChain();
-    this.logger.log('LLM service initialized with RAG support');
+    this.logger.log('LLM service initialized with Gemini and RAG support');
   }
 
   private async loadKnowledgeDocuments(): Promise<Document[]> {
@@ -132,7 +133,7 @@ export class LlmService implements OnModuleInit {
 
   async chat(message: string): Promise<string> {
     if (!this.llm) {
-      return 'LLM service is not configured. Please set OPENAI_API_KEY environment variable.';
+      return 'LLM service is not configured. Please set GOOGLE_API_KEY environment variable.';
     }
 
     try {
@@ -146,7 +147,7 @@ export class LlmService implements OnModuleInit {
 
   async *chatStream(message: string, signal?: AbortSignal): AsyncGenerator<string> {
     if (!this.llm) {
-      yield 'LLM service is not configured. Please set OPENAI_API_KEY environment variable.';
+      yield 'LLM service is not configured. Please set GOOGLE_API_KEY environment variable.';
       return;
     }
 

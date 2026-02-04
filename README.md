@@ -71,21 +71,17 @@ That's it! Start chatting with your AI Software Engineering assistant.
 ### Backend Setup
 
 ```bash
-# From repo root
+# Set up environment (from repo root, if not done already)
 cp .env.example .env
-
 # Edit .env and add your GOOGLE_API_KEY!
 
+# Install and run backend
 cd backend
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run start:dev
 ```
 
-Backend runs on http://localhost:3000
+Backend runs on http://localhost:3000 (reads `.env` from project root)
 
 ### Frontend Setup
 
@@ -330,7 +326,7 @@ Your API key is missing or invalid. Check:
 
 ### "Failed to get response from AI service"
 
-- Check your Gemini API quota (15 req/min on free tier)
+- Check your Gemini API quota at [Google AI Studio](https://aistudio.google.com)
 - Verify your API key has the correct permissions
 - Check network connectivity
 

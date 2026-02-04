@@ -224,11 +224,14 @@ Get chat history for the current session.
 
 ## 🧪 Testing
 
-### Run Backend Tests
+### Run All Tests
 
 ```bash
-cd backend
-npm test
+# Backend tests (18 tests)
+cd backend && npm test
+
+# Frontend tests (18 tests)
+cd frontend && npm test
 ```
 
 ### Sample Questions & Expected Responses
